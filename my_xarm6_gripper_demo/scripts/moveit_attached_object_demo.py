@@ -55,38 +55,51 @@ class MoveAttachedObjectDemo:
         arm.go()
         
         # 移除场景中之前运行残留的物体
-        scene.remove_world_object('table')
-        # 设置桌面的高度
-        table_ground = -0.1
-        
-        # 设置table的三维尺寸
-        table_size = [0.7, 0.7, 0.01]
+        scene.remove_world_object('eaibot_n1')
+        # 设置box的高度
+        eaibot_n1_height = 0
+        # 设置box的三维尺寸
+        eaibot_n1_size = [0.65, 0.7, 0.01]
+        # 将box加入场景当中
+        eaibot_n1_pose = PoseStamped()
+        eaibot_n1_pose.header.frame_id = 'link_base'
+        eaibot_n1_pose.pose.position.x = 0.0
+        eaibot_n1_pose.pose.position.y = 0.0
+        eaibot_n1_pose.pose.position.z = eaibot_n1_height + eaibot_n1_size[2] / 2.0
+        eaibot_n1_pose.pose.orientation.w = 1.0
+        scene.add_box('eaibot_n1', eaibot_n1_pose, eaibot_n1_size)
+        rospy.sleep(2)
 
-        # 将table加入场景当中
-        table_pose = PoseStamped()
-        table_pose.header.frame_id = 'link_base'
-        table_pose.pose.position.x = 0.25
-        table_pose.pose.position.y = 0.0
-        table_pose.pose.position.z = table_ground + table_size[2] / 2.0
-        table_pose.pose.orientation.w = 1.0
-        scene.add_box('table', table_pose, table_size)
-        
-        rospy.sleep(2)  
+        # 移除场景中之前运行残留的物体
+        scene.remove_world_object('ground')
+        # 设置box的高度
+        ground_height = -0.3
+        # 设置box的三维尺寸
+        ground_size = [2, 2, 0.01]
+        # 将box加入场景当中
+        ground_pose = PoseStamped()
+        ground_pose.header.frame_id = 'link_base'
+        ground_pose.pose.position.x = 0.0
+        ground_pose.pose.position.y = 0.0
+        ground_pose.pose.position.z = ground_height + ground_size[2] / 2.0
+        ground_pose.pose.orientation.w = 1.0
+        scene.add_box('ground', ground_pose, ground_size)
+        rospy.sleep(2)
 
         # 更新当前的位姿
         arm.set_start_state_to_current_state()
 
         # 设置机械臂的目标位置，使用六轴的位置数据进行描述（单位：弧度）
-        joint_positions = [-0.002711, -0.093032, -0.525435, -0.016041, 0.621292, 0.002409]
-        arm.set_joint_value_target(joint_positions)
+        # joint_positions = [-0.002711, -0.093032, -0.525435, -0.016041, 0.621292, 0.002409]
+        # arm.set_joint_value_target(joint_positions)
                  
         # 控制机械臂完成运动
-        arm.go()
-        rospy.sleep(1)
+        # arm.go()
+        # rospy.sleep(1)
         
         # 控制机械臂回到初始化位置
-        arm.set_named_target('home')
-        arm.go()
+        # arm.set_named_target('home')
+        # arm.go()
 
         moveit_commander.roscpp_shutdown()
         moveit_commander.os._exit(0)
